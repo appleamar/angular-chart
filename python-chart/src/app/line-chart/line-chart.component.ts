@@ -15,9 +15,11 @@ export class LineChartComponent implements OnInit {
   //   { data: [180, 480, 770, 90, 1000, 270, 400], label: 'Series C', yAxisID: 'y-axis-1' }
   // ];
   public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+    { data: [10,15,9,90,100,150,90,125,120,122,40,30,25,10], label: 'train' },
+    { data: [5, 24, 20,45, 29, 56, 87, 220,176,169,187,28,66], label: 'test' },
+    { data: [180, 48, 77, 90, 10, 27, 40,90,67,45,96,41,37,67], label: 'model' }
   ];
-  public lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartLabels: Label[] = ['0', '25', '50', '75', '100', '125', '150'];
   public lineChartOptions: (ChartOptions ) = {
     elements: {
       line: {
@@ -36,29 +38,29 @@ export class LineChartComponent implements OnInit {
     }
   };
   public lineChartColors: Color[] = [
-    { // red
-      backgroundColor: 'rgba(255,0,0,0.3)',
-      borderColor: 'red',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { // blue
+      backgroundColor: '#fff',
+      borderColor: 'rgba(0, 128, 128,1)',
+      pointBackgroundColor: 'rgba(0, 128, 128,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+      pointHoverBorderColor: 'rgba(0, 128, 128,0.8)'
     },
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { // orange
+      backgroundColor: '#fff',
+      borderColor: 'rgba(255,165,0,1)',
+      pointBackgroundColor: 'rgba(255,165,0,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+      pointHoverBorderColor: 'rgba(255,165,0,0.8)'
     },
-    { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
+    { // green
+      backgroundColor: '#fff',
+      borderColor: 'rgba(34,139,34,1)',
+      pointBackgroundColor: 'rgba(34,139,34,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
+      pointHoverBorderColor: 'rgba(34,139,34,1)'
     }
    
   ];
