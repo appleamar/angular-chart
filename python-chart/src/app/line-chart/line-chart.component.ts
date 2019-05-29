@@ -1,25 +1,26 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild,ChangeDetectorRef } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
+import { map as _map, slice as _slice, property as _property, forEach as _forEach, cloneDeep as _clone, findIndex as _findIndex } from 'lodash';
+
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
-
+import {HttpService} from "../http.service"
 @Component({
   selector: 'app-line-chart',
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
 export class LineChartComponent implements OnInit {
-  // public lineChartData: ChartDataSets[] = [
-  //   { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-  //   { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-  //   { data: [180, 480, 770, 90, 1000, 270, 400], label: 'Series C', yAxisID: 'y-axis-1' }
-  // ];
-  public lineChartData: ChartDataSets[] = [
-    { data: [10,15,9,90,100,150,90,125,120,122,40,30,25,10], label: 'train' },
-    { data: [5, 24, 20,45, 29, 56, 87, 220,176,169,187,28,66], label: 'test' },
-    { data: [180, 48, 77, 90, 10, 27, 40,90,67,45,96,41,37,67], label: 'model' }
-  ];
-  public lineChartLabels: Label[] = ['0', '25', '50', '75', '100', '125', '150'];
+  constructor(public httpService: HttpService,public changeDetectorRef: ChangeDetectorRef) { }
+  
+  /*barChartData - input chartData modified as per ng2-bar chart data */
+  public trainData: any[] = [];
+  public testData: any[] = [];
+  public forecastData: any[] = [];
+
+  
+  public lineChartData: any[] = [];
+  public lineChartLabels: Label[] = ['0', '25', '50', '75', '100', '125', '150','175','200','225','300'];
   public lineChartOptions: (ChartOptions ) = {
     elements: {
       line: {
@@ -69,10 +70,52 @@ export class LineChartComponent implements OnInit {
   public lineChartPlugins = [pluginAnnotations];
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
-
-  constructor() { }
+ 
 
   ngOnInit() {
+    this.getMatplotData();
   }
 
+  public getMatplotData(){
+    this.httpService.getTrainData().subscribe(
+      (response: any) => { 
+       this.trainData = this.updateChart(response,'train');
+      },
+      (error: any) => {
+        console.log('error', error);
+      }
+    );
+    this.httpService.getTestData().subscribe(
+      (response: any) => {
+        this.testData= this.updateChart(response,'test');
+      },
+      (error: any) => {
+        console.log('error', error);
+      }
+    );
+   
+    this.httpService.getForecastData().subscribe(
+      (response: any) => {
+        this.forecastData= this.updateChart(response,'model');
+        this.lineChartData.push(this.trainData);
+        this.lineChartData.push(this.testData);
+        this.lineChartData.push(this.forecastData);
+        this.changeDetectorRef.detectChanges();
+      },
+      (error: any) => {
+        console.log('error', error);
+      }
+    );
+  }
+
+
+  //chart updation 
+  public updateChart(cdata,label) {
+    let chartData : any = {};
+    chartData['data']=_map(cdata, _property('total_activity'));
+    chartData['label']= label;
+     return chartData;
+    
+    }
+ 
 }
